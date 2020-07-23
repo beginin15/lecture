@@ -1,0 +1,74 @@
+# IoC 컨테이너 1부
+
+## `@ComponentScan`
+
+### `basePackages`
+
+- 컴포넌트 스캔 범위를 지정한다.
+
+- 지정한 패키지를 기준으로 모든 하위 패키지 내 컴포넌트들을 스캔하여 빈으로 등록한다.
+
+  ```java
+  @ComponentScan(basePackages={"com.firstpackage","com.secondpackage"})
+  ```
+
+- `basePackageClasses` 를 사용하면 type-safe하게 범위를 지정할 수 있다. (추천!)
+
+  ```java
+  @ComponentScan(basePackageClasses = SpringFrameworkCoreApplication.class)
+  ```
+
+  > `basePackageClasses` 의 클래스를 포함하는 패키지 기준으로 컴포넌트 스캔을 수행한다.
+
+- default는 `@ComponentScan`을 붙이고 있는 Configuration 클래스부터 컴포넌트 스캔을 수행한다.
+
+
+
+### `excludeFilters`
+
+-   컴포넌트 중에서 빈에서 제외할 대상들을 필터링하는 기능을 제공한다.
+
+
+
+### 컴포넌트 종류
+
+- `@Repository`
+- `@Service`
+- `@Controller`
+- `@Configuration`
+
+
+
+### 컴포넌트 스캔의 동작
+
+- `BeanFactoryPostProcessor` 를 구현하고 있는 `ConfigurationClassPostProcessor` 에 의해 컴포넌트 스캔이 동작한다.
+- `BeanFactoryPostProcessor` 은 다른 모든 빈들을 생성하기 이전에 동작하는 라이프사이클 콜백을 제공한다.
+
+
+
+### 컴포넌트 스캔의 단점?
+
+- 싱글톤 스코프인 빈들은 애플리케이션이 구동되는 초기에 모두 생성하기 때문에 구동 시간이 오래 걸릴 수 있다.
+
+
+
+## Functional을 사용한 빈 등록 방법
+
+### 사용 이유
+
+- Functional을 이용하여 빈을 등록해주면 프록시, 리플렉션과 같은 기법들을 사용하지 않기 때문에 초기 구동 시 성능상 이점을 얻을 수 있다.
+
+- But, 해당 방법은 컴포넌트 스캔을 대체하는 방법이라고 보긴 어렵다!
+
+  - 어노테이션 기반으로 동작하지 않으므로 설정 파일의 크기가 커지고 일일이 빈을 등록해야 하기 때문에
+  - `@Bean`을 이용하여 빈을 등록하는 방법을 대체 + 구동 시 성능 이점
+
+  
+
+### 특징
+
+- 컴포넌트 스캔과 달리 패키지 범위에 영향받지 않고 빈으로 등록할 수 있다.
+
+
+
+> [구현 코드](https://github.com/beginin15/spring-framework-core/commit/20bf6bee10959745991969eb79d25b190e0eb320)
