@@ -4,14 +4,14 @@
 
 - 애플리케이션 구동 시점에 의존성을 자동으로 주입해준다.
 
-
+</br>
 
 ### `repuired` 옵션
 
 - 해당 어노테이션이 붙은 객체가 필수적으로 빈으로 등록되어야 하는지 결정할 수 있다.
 - default는 `true`, 즉 해당 객체가 빈으로 등록되어 있지 않으면 애플리케이션 구동에 실패한다!
 
-
+</br>
 
 ### 사용할 수 있는 위치
 
@@ -23,7 +23,7 @@
 
 - 필드
 
-
+</br>
 
 ### 위치에 따른 차이점
 
@@ -52,14 +52,14 @@
 
   > [구현 코드](https://github.com/beginin15/spring-framework-core/commit/811c61522346859095c0e059b927bb76475a40fd)
 
-  
+</br>
 
 ## 의존 객체가 여러 개인 경우
 
 - 의존성 주입될 타입에 해당되는 구현체가 여러 개인 경우, 주입할 타입을 지정해줘야 한다.
 - `@Primary`, `@Qualifier`, 리스트로 모두 받기, 필드 이름 이용하기 등 여러 방법이 존재한다.
 
-
+</br>
 
 ### 언제 필요할까?
 
@@ -83,7 +83,7 @@
   	- yourBookRepository: defined in file [.../spring-framework-core/build/classes/java/main/com/course/spring_framework/core/YourBookRepository.class]
   ```
 
-
+</br>
 
 ### `@Primary`
 
@@ -98,7 +98,7 @@
 
 > [구현 코드](https://github.com/beginin15/spring-framework-core/commit/50b929bbb507623bb5ad79b4fa4887110b268383)
 
-
+</br>
 
 ### `@Qualifier`
 
@@ -128,7 +128,7 @@
 
 > [구현 코드](https://github.com/beginin15/spring-framework-core/commit/531bd339b10ddaa682b746233c06f23d7bf36fae)
 
-
+</br>
 
 ### 리스트로 모두 받기
 
@@ -143,7 +143,7 @@
 
 > [구현 코드](https://github.com/beginin15/spring-framework-core/commit/38a7d0fe2e89c74cb2598397e3b7ee69827d77ed)
 
-
+</br>
 
 ### 필드 이름 이용하기
 
@@ -160,13 +160,13 @@
 
 > [구현 코드](https://github.com/beginin15/spring-framework-core/commit/0e2e97960c022c9dbb915d56bf94c3892e736eca)
 
-
+</br>
 
 ## 스프링이 의존성을 주입하는 방법
 
 > 의존 객체가 여러 개일 때 처리하는 다양한 방법을 살펴보았다. 그렇다면 스프링은 이러한 작업들을 어떻게 처리하는걸까?
 
-
+</br>
 
 ### 라이프사이클 콜백
 
@@ -180,7 +180,7 @@
 
   ![bean_lifecycle_initialization](https://user-images.githubusercontent.com/33659848/88140608-018f8900-cc2d-11ea-99ef-8b3b7080f421.png)
 
-
+</br>
 
 ### `BeanPostProcessor`
 
@@ -190,7 +190,7 @@
 
   > `BeanFactory`가 자신에게 등록되어 있는 `BeanPostProcessor` 타입을 찾고 그 중에 `AutowiredAnnotaionBeanPostProcessor`을 이용하여 `@Autowired` 어노테이션을 처리하는 로직을 일반적인 빈들에게 수행한다. 여기서 `AutowiredAnnotaionBeanPostProcessor`도 빈이라는 것을 알 수 있다.
 
-
+</br>
 
 ## 초기화 메소드
 
@@ -202,7 +202,7 @@
 
 > [구현 코드](https://github.com/beginin15/spring-framework-core/commit/33f87f0e02c7048d7dab7d5dc9fc563eef7bbb76)
 
-
+</br>
 
 ### `InitializingBean`
 
