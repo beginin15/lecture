@@ -56,7 +56,7 @@
 
   - 스프링에서 제공하는 클래스나 인터페이스를 상속 및 구현할 필요가 없다.
 
-- `@EventListener`를 이용하여 이벤트 핸들러가 처리할 메소드를 지정한다.
+- `@EventListener`를 이용하여 빈의 메소드에 사용할 수 있다. (이벤트 핸들러가 처리할 메소드)
 
   - 즉, `ApplicationListener`를 구현할 필요없이 어노테이션만 붙이면 된다.
 
@@ -117,14 +117,84 @@
     ```
 
     > 아래가 위보다 나중에 처리된다.
+  
+  > [구현 코드](https://github.com/beginin15/spring-framework-core/commit/be4778a4d0b15e87a8faa0308dcecc3ed2ee0e74)
 
 </br>
 
 ### 비동기적으로 이벤트 처리
 
+- 기본적으로 이벤트는 synchronized 하게 처리한다.
+
 - `@Async`를 이용하여 서로 다른 스레드가 이벤트를 동시적으로 처리할 수 있다.
-- 서로 다른 스레드가 이벤트를 처리하므로, 우선 순위(`@Ordered`)는 무의미하다.
-  - 스레드 스케줄링의 영향을 받기 때문에 
+
+  - `@Configuration` 이 붙은 클래스에 `@EnableAsync` 함께 사용해야 한다.
+
+    ```java
+    @SpringBootApplication
+    @EnableAsync
+    public class SpringFrameworkCoreApplication {
+    	// ...
+    }
+    ```
+
+- 서로 다른 스레드가 이벤트를 처리, 우선 순위(`@Ordered`)는 무의미하다.
+
+  > [구현 코드](https://github.com/beginin15/spring-framework-core/commit/69309144cec9f402e5f020a79f38ae7a790c9cbd)
+
+  > `@Async` 사용 전
+
+  ```
+  Thread[restartedMain,5,main]
+  또 다른 핸들러, 100
+  Thread[restartedMain,5,main]
+  이벤트 받았다! 100
+  ```
+
+  > `@Aysnc` 사용 후
+
+  ```
+  Thread[task-2,5,main] // 스레드가 다르다.
+  Thread[task-1,5,main]
+  이벤트 받았다! 100
+  또 다른 핸들러, 100
+  ```
+
+</br>
+
+## 스프링이 제공하는 기본 이벤트
+
+### `ContextRefreshedEvent`
+
+- `ApplicationContext`를 초기화 했거나 리프레시 했을 때 발생하는 이벤트
+
+###  `ContextClosedEvent`
+
+- `ApplicationContext`를 `close()`하여 싱글톤 빈이 소멸되는 시점에 발생하는 이벤트
+
+> [구현 코드](https://github.com/beginin15/spring-framework-core/commit/6ba7d8b81f39800da9d938ee3172b1d6d0168fae)
+
+> 이벤트 호출 시점 살펴보기
+
+```
+2020-07-31 14:11:27.778  INFO 2084 --- [  restartedMain] c.c.s.c.SpringFrameworkCoreApplication   : Starting SpringFrameworkCoreApplication on useruiMcBookPro with PID 2084 (/Users/user/IdeaProjects/spring-framework-core/build/classes/java/main started by user in /Users/user/IdeaProjects/spring-framework-core)
+2020-07-31 14:11:27.780  INFO 2084 --- [  restartedMain] c.c.s.c.SpringFrameworkCoreApplication   : No active profile set, falling back to default profiles: default
+2020-07-31 14:11:27.808  INFO 2084 --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-07-31 14:11:28.163  INFO 2084 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+Thread[restartedMain,5,main]
+ContextRefreshedEvent // ApplicationContext 초기화
+2020-07-31 14:11:28.186  INFO 2084 --- [  restartedMain] c.c.s.c.SpringFrameworkCoreApplication   : Started SpringFrameworkCoreApplication in 0.589 seconds (JVM running for 1.079)
+2020-07-31 14:11:28.197  INFO 2084 --- [  restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+Thread[task-2,5,main]
+이벤트 받았다! 100
+Thread[task-1,5,main]
+또 다른 핸들러, 100
+Thread[SpringContextShutdownHook,5,main]
+ContextClosedEvent // 프로그램 종료하여 싱글톤 빈들이 소멸되는 시점
+2020-07-31 14:11:31.664  INFO 2084 --- [extShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+```
+
+</br>
 
 ## 기타
 
