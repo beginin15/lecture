@@ -1,4 +1,4 @@
-# IoC 컨테이너 1부
+# IoC 컨테이너 4부
 
 ## `@ComponentScan`
 
@@ -18,7 +18,7 @@
   @ComponentScan(basePackageClasses = SpringFrameworkCoreApplication.class)
   ```
 
-  > `basePackageClasses` 의 클래스를 포함하는 패키지 기준으로 컴포넌트 스캔을 수행한다.
+  > `basePackageClasses` 에 지정한 클래스를 포함하는 패키지 기준으로 컴포넌트 스캔을 수행한다.
 
 - default는 `@ComponentScan`을 붙이고 있는 Configuration 클래스부터 컴포넌트 스캔을 수행한다.
 
@@ -30,19 +30,15 @@
 
 </br>
 
-### 컴포넌트 종류
-
-- `@Repository`
-- `@Service`
-- `@Controller`
-- `@Configuration`
-
-</br>
-
 ### 컴포넌트 스캔의 동작
 
 - `BeanFactoryPostProcessor` 를 구현하고 있는 `ConfigurationClassPostProcessor` 에 의해 스캐닝이 처리된다.
+
 - `BeanFactoryPostProcessor` 은 다른 모든 빈들을 생성하기 이전에 동작하는 라이프사이클 콜백을 제공한다.
+
+  > [`BeanFactoryPostProcessor`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/factory/config/BeanFactoryPostProcessor.html) used for bootstrapping processing of [`@Configuration`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html) classes.
+
+  > `BeanPostProcessor` 과 다른 라이프사이클!
 
 </br>
 
@@ -75,3 +71,14 @@
   > [구현 코드](https://github.com/beginin15/spring-framework-core/commit/20bf6bee10959745991969eb79d25b190e0eb320)
 
   > [람다식 대체](https://github.com/beginin15/spring-framework-core/commit/cbe796243d6a7c98c51d4603ece0b90da82bdf5a)
+
+</br>
+
+## 기타
+
+### 컴포넌트 종류
+
+- `@Repository`
+- `@Service`
+- `@Controller`
+- `@Configuration`

@@ -1,4 +1,4 @@
-# IoC 컨테이너 1부
+# IoC 컨테이너 10부
 
 ## `ResourceLoader`
 
@@ -22,7 +22,7 @@
 ### Classpath
 
 - 자바 가상머신이 프로그램을 실행할 때 필요한 클래스 파일과 패키지의 경로
-- `target 혹은 build/class`가 classpath의 루트
+- `target 혹은 build`가 classpath의 루트
 
 </br>
 

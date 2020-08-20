@@ -1,10 +1,10 @@
-# IoC 컨테이너 1부
+# IoC 컨테이너 2부
 
 ## `ApplicationContext`와 다양한 빈 설정 방법
 
 - xml을 이용한 방법부터 스프링 부트에서 제공하는 어노테이션 기반 방법까지 만들어진 순서대로 경험해보자
 
-
+</br>
 
 ## xml
 
@@ -13,7 +13,7 @@
 - [xml 파일 명세](#xml 파일 명세)
 - [구현 코드](https://github.com/beginin15/spring-framework-core/commit/69375bfbce29b71fcadb9c29cc2c50c27bdb9c35)
 
-
+</br>
 
 ## xml + Component scan
 
@@ -41,7 +41,7 @@
 
     > `@Autowired`나 `@Inject`를 이용하여 의존성을 주입해줘야 한다. 
 
-
+</br>
 
 ## 자바 설정 파일 
 
@@ -56,7 +56,7 @@
 
   - 빈으로 등록된 객체는 파라미터로 받아서 의존성 주입이 가능하다. [참고](https://github.com/beginin15/spring-framework-core/commit/3418e3974c2166d2f13b38d3db277c8dd31e3bbc)
 
-    
+</br>
 
 ## 자바 설정 파일 + Component Scan
 
@@ -76,7 +76,7 @@
 
 - [구현 코드](https://github.com/beginin15/spring-framework-core/commit/9151a6b81f8fbabdc5dcefa8dd537e8ecb5dcbdd)
 
-
+</br>
 
 ## `@SpringBootApplication`
 
@@ -85,7 +85,7 @@
 
 - [구현 코드](https://github.com/beginin15/spring-framework-core/commit/4f1b9e504ee8fa60bcf42927158c6713a8cc6011)
 
-
+</br>
 
 ## 부연 설명
 
@@ -120,7 +120,7 @@
 
     - 주입할 객체도 빈으로 정의되어 있어야 한다.
 
-
+</br>
 
 ### 빈 스코프 종류
 

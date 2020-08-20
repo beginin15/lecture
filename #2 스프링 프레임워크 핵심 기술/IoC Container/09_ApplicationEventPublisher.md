@@ -1,4 +1,4 @@
-# IoC 컨테이너 1부
+# IoC 컨테이너 9부
 
 ## `ApplicationEventPublisher`
 
@@ -84,7 +84,7 @@
 
 </br>
 
-### 주의할 것
+## 주의할 것
 
 - 이벤트 객체는 빈이 아니다!
 - 이벤트 핸들러는 빈이다.
@@ -94,30 +94,31 @@
 
 </br>
 
-### 이벤트 우선순위
+## 이벤트 우선순위
+
+### `@Order`
 
 - 동일한 이벤트를 처리하는 핸들러가 2개 이상인 경우, `@Order`를 이용하여 대략적인 순서를 지정할 수 있다.
-
   - 대략적이라고 표현한 이유는 디테일하게 지정할 수 없기 때문에? *(자세히 알아보기)*
 
-    ```java
-    @EventListener
-    @Order(Ordered.HIGHEST_PRECEDENCE) // 일빠로 처리한다.
-    public void handle(MyEvent event) {
-      // ...
-    }
-    ```
+  ```java
+  @EventListener
+  @Order(Ordered.HIGHEST_PRECEDENCE) // 일빠로 처리한다.
+  public void handle(MyEvent event) {
+    // ...
+  }
+  ```
 
-    ```java
-    @EventListener
-    @Order(Ordered.HIGHEST_PRECEDENCE + 2) // 상수값으로 대략적인 순서를 표현한다.
-    public void handle(MyEvent event) {
-      // ...
-    }
-    ```
+  ```java
+  @EventListener
+  @Order(Ordered.HIGHEST_PRECEDENCE + 2) // 상수값으로 대략적인 순서를 표현한다.
+  public void handle(MyEvent event) {
+    // ...
+  }
+  ```
 
-    > 아래가 위보다 나중에 처리된다.
-  
+  > 아래가 위보다 나중에 처리된다.
+
   > [구현 코드](https://github.com/beginin15/spring-framework-core/commit/be4778a4d0b15e87a8faa0308dcecc3ed2ee0e74)
 
 </br>
@@ -172,27 +173,29 @@
 
 - `ApplicationContext`를 `close()`하여 싱글톤 빈이 소멸되는 시점에 발생하는 이벤트
 
-> [구현 코드](https://github.com/beginin15/spring-framework-core/commit/6ba7d8b81f39800da9d938ee3172b1d6d0168fae)
+  > [구현 코드](https://github.com/beginin15/spring-framework-core/commit/6ba7d8b81f39800da9d938ee3172b1d6d0168fae)
 
-> 이벤트 호출 시점 살펴보기
+  > 이벤트 호출 시점 살펴보기
 
-```
-2020-07-31 14:11:27.778  INFO 2084 --- [  restartedMain] c.c.s.c.SpringFrameworkCoreApplication   : Starting SpringFrameworkCoreApplication on useruiMcBookPro with PID 2084 (/Users/user/IdeaProjects/spring-framework-core/build/classes/java/main started by user in /Users/user/IdeaProjects/spring-framework-core)
-2020-07-31 14:11:27.780  INFO 2084 --- [  restartedMain] c.c.s.c.SpringFrameworkCoreApplication   : No active profile set, falling back to default profiles: default
-2020-07-31 14:11:27.808  INFO 2084 --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2020-07-31 14:11:28.163  INFO 2084 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
-Thread[restartedMain,5,main]
-ContextRefreshedEvent // ApplicationContext 초기화
-2020-07-31 14:11:28.186  INFO 2084 --- [  restartedMain] c.c.s.c.SpringFrameworkCoreApplication   : Started SpringFrameworkCoreApplication in 0.589 seconds (JVM running for 1.079)
-2020-07-31 14:11:28.197  INFO 2084 --- [  restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
-Thread[task-2,5,main]
-이벤트 받았다! 100
-Thread[task-1,5,main]
-또 다른 핸들러, 100
-Thread[SpringContextShutdownHook,5,main]
-ContextClosedEvent // 프로그램 종료하여 싱글톤 빈들이 소멸되는 시점
-2020-07-31 14:11:31.664  INFO 2084 --- [extShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
-```
+  ```
+  2020-07-31 14:11:27.778  INFO 2084 --- [  restartedMain] c.c.s.c.SpringFrameworkCoreApplication   : Starting SpringFrameworkCoreApplication on useruiMcBookPro with PID 2084 (/Users/user/IdeaProjects/spring-framework-core/build/classes/java/main started by user in /Users/user/IdeaProjects/spring-framework-core)
+  2020-07-31 14:11:27.780  INFO 2084 --- [  restartedMain] c.c.s.c.SpringFrameworkCoreApplication   : No active profile set, falling back to default profiles: default
+  2020-07-31 14:11:27.808  INFO 2084 --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+  2020-07-31 14:11:28.163  INFO 2084 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+  Thread[restartedMain,5,main]
+  ContextRefreshedEvent // ApplicationContext 초기화
+  2020-07-31 14:11:28.186  INFO 2084 --- [  restartedMain] c.c.s.c.SpringFrameworkCoreApplication   : Started SpringFrameworkCoreApplication in 0.589 seconds (JVM running for 1.079)
+  2020-07-31 14:11:28.197  INFO 2084 --- [  restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+  Thread[task-2,5,main]
+  이벤트 받았다! 100
+  Thread[task-1,5,main]
+  또 다른 핸들러, 100
+  Thread[SpringContextShutdownHook,5,main]
+  ContextClosedEvent // 프로그램 종료하여 싱글톤 빈들이 소멸되는 시점
+  2020-07-31 14:11:31.664  INFO 2084 --- [extShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+  ```
+
+  
 
 </br>
 

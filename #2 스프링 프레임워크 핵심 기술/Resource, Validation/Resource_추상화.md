@@ -1,234 +1,164 @@
-java.net URL을 추상화 한 것
+# Resource / Validation 1부
 
-- 클래스 패스를 기준으로 리소스를 가져오는 기능이 없었기 때문에
+> 스프링의 대표적인 추상화 레퍼런스를 살펴보자
 
-classpath?
+</br>
 
-- 지원하는 접두어가 classpath
+## Resource의 추상화
 
+### 등장 이유
 
+- 자바의 표준 `java.net.URL` 클래스와 URL prefix를 처리하는 표준 핸들러는 로우 레벨 자원에 접근하기에 불편하다.
+  - classpath 기준으로 리소스를 읽어오는 기능이 없다.
+  - `ServletContext`를 기준으로 상대 경로를 읽어오는 기능이 없다.
+  - 특별한 URL 접미사를 처리하는 새로운 핸들러를 등록하여 사용할 수 있지만 구현이 복잡하고 편의성 메소드가 부족하다. (파일이 존재하는지 검사하는 메소드 등)
 
-ApplicationContext의 타입에 따라 결정된다.
+- <u>`java.net.URL`을 **추상화**하여</u> 다양한 URL prefix를 가진 리소스에 접근하는 방법을 통일시켰다. 
 
-Xml, Classpath, File...emd
+</br>
 
+### 활용 예시
 
+스프링 설정 파일을 찾을 때 자주 사용된다.
 
-구현체에 따라 인자로 전달되는 문자열이 리소스 타입으로 연결된다. 
+```java
+ApplicationContext context = new ClassPathXmlApplicationContext("blah.xml");
+// ApplicationContext context = new FileSystemXmlApplicationContext("blah.xml"); 
+```
 
-구현체에 상관없이 리소스 타입을 강제하려면 prefix!! 권고! 명시하는것이 좋음
+- 인자로 전달된 문자열이 내부에서 `Resource`로 변환되어 처리된다.
+- URL prefix 중 하나인 classpath를 기준으로 설정 파일을 찾는다. (주석은 `file:///` 기준으로 설정 파일을 찾는다?)
 
----
+ </br>
 
-Validation 추상화
+### 구현체
 
-- 웹 애플리케이션용이 아님. 여러 계층에서 사용 가능 (쉡, 서비스, 데이터)
-- 2가지 메소드를 구현해야 한다.
-  - support 해당 인터페이스가 지원하는 클래스인지 검사
-  - validate 실제 객체 검증을 위한 로직 
+- `UrlResource`
+  - `java.net.URL` 의 구현체
+  - 기본적으로 http, https, ftp, file, jar 프로토콜을 지원한다.
+- `ClassPathResource`
+- `FileSystemResource`
+- `ServletContextResource`
+  - 웹 애플리케이션 루트에서 상대 경로로 리소스를 찾는다.
+  - 스프링 부트는 기본적으로 서블릿 기반 `WebApplicationContext`를 하며`WebApplicationContext`의 구현체는`ServletContextResource`를 사용하기 때문에 사실상 가장 많이 사용된다고 볼 수 있다. [📌](#WebApplicationContext)
 
+</br>
 
+## 리소스 읽어오기
 
-- BeanProperyBindingResult는 테스트라서 직접 생성하는 것. 스프링 MVC가 자동으로 생성해서 파라미터로 넘기준다.
+`Resource` 의 타입은 **`ApplicationContext`의 타입**과 location 문자열에 따라 결정된다.
 
-- 에러 코드를 제공한다.
-  - 내가 직접 지정할 수도 있고, 검증하고자하는 데이터의 필드, 타입, 에러코드 이름 등을 제공한다.
+<br>
 
-스프링부트
+### ApplicationContex의 타입
 
-- LocalValidatorFactoryBean
-- Bean Validation 어노테이션을 지원
-- 그냥 Validator를 주입받으면 거기에 Loca..이 주입됨
-  - 검증하고자 하는 빈에 존재하는 어노테이션을 기반으로 객체 검증을 해줌 
+사용하는 `ApplicationContext`의 구체적인 타입에 따라, 인자로 전달된 리소스 문자열이 변환될 Resource 구현체 타입이 결정된다.
 
+> 예시 1
 
+```java
+var ctx = new FileSystemXmlApplicationContext("blah.xml");
+```
 
----
+- `ApplicationContext`의 구체적인 타입이 `FileSystemXmlApplicationContext`이기 때문에 인자로 전달된 리소스는 `FileSystemResource`가 된다.
 
-데이터 바인딩 추상화
+</br>
 
-- 프로퍼티를 타겟 객체에 바인딩한다.
-- 입력한 값을 애플리케이션 도매인 객체에 할당한다.
-- 입력은 주로 문자열, 객체가 가진 프로퍼티 타입에 매칭되도록, 변환해주는 기능 자체를 바인딩이라고 한다.
+> 예시 2
 
+```java
+    @Autowired
+    ResourceLoader resourceLoader;
 
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        System.out.println(resourceLoader.getClass());
+        Resource resource = resourceLoader.getResource("test.txt");
+      	System.out.println(resource.getClass());
+    }
+```
 
-- DataBinder
-  - MVC 웹 요청 처리시
-  - xml 파일에 작성되는 이름을 적절한 빈 타입으로 변환할 때도 사용되었다.
-  - Express?
-  - 여러 곳에서 사용된다.
+- 스프링 MVC는 기본적으로 `WebApplicationContext`의 구현체가 주입될 것이다.
+- 리소스 문자열의 prefix가 명시되지 않았으므로, `ApplicationContext` 타입에 따라 서블릿 기반 리소스 타입 (`ServletContextResource`)을 반환한다.
 
- PropertyEditor
+> 예시 2 결과
 
-- 구현해야 하는 메소드가 너무 많음
+```
+class org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext
+class org.springframework.web.context.support.ServletContextResource
+```
 
-PropertyEditorSupport
+- 참고로 스프링 MVC 프로젝트가 아닌 일반 스프링 부트 프로젝트라면 기본으로 `AnnotationConfigApplicationContext` 가 주입된다.
 
-- getAsText
-  - 객체를 텍스트로 바인딩하여 반환
-- setAsText
-  - 텍스트를 객체로 바인딩
+- 이 때, prefix를 명시하지 않은 리소스의 타입은 `ClassPathResource`로 반환한다.
 
--  stateful 하다
-  - 가지고 있는 value가 스레드 간에 공유한다.
-    - editor가 가지고 있는 값, 상태를 가진다.
-  - thread-safe하지 않다
-  - 즉, 컴포넌트로 등록하지 말아야한다. (싱글톤 스코프 안돼!)
-  - 혹은 스레드 스코프로 지정한다.
-    - 한 스레드 내에서만 유효하다.
+  ```
+  class org.springframework.context.annotation.AnnotationConfigServletWebServerApplicationContext
+  class org.springframework.core.io.ClassPathResource
+  ```
 
+> [구현 코드](https://github.com/beginin15/spring-framework-core/commit/82aa3086a367dc91105c94df437f1ff941a80272)
 
+</br>
 
-- @InitBinder
-  - 특정 컨트롤러에서 사용할 바인더를 등록한다.
-  - 클래스 내의 모든 메소드에 대해 파라미터를 바인딩하기 전에 자동으로 호출된다.
+### Location의 Prefix
 
+`ApplicationContext`의 타입과 상관없이 리소스의 타입을 강제하려면 Prefix를 명시한다.
 
+- Prefix 종류  
 
+  `java.net.URL`이 지원하는 접두어 + `classpath:`
 
+> 예시
 
-- 여기까지 스프링 3.0이전 바인딩. 이런 저런 설정이 불편하니까
-  - 설정이 은근 많다.
-  - thread-safe하지 않다.
+```java
+    @Autowired
+    ResourceLoader resourceLoader;
 
----
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        System.out.println(resourceLoader.getClass());
+        Resource resource = resourceLoader.getResource("classpath:test.txt");
+      	System.out.println(resource.getClass());
+    }
+```
 
-문자와 객체간의 변환이 아닌, 객체와 객체간의 변환도 제공
+- 기본으로 `WebApplicationContext` 계열의 `ApplicationContext`가 주입되지만, Location의 prefix (`classpath:`)를 명시해주었기 때문에 서블릿 기반 리소스가 아닌 `ClassPathResource` 를 반환한다.
 
-상태를 가지고 있는 thread-safe 보완
+> 예시 결과
 
-- 빈으로 등록 가능!
-- 컨버터를 전역으로 설정 가능 (클래스 단위가 아닌)
+```
+class org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext
+class org.springframework.core.io.ClassPathResource
+```
 
+> [구현 코드](https://github.com/beginin15/spring-framework-core/commit/dc2b6041367722af7a08142eca28c8f57462b20c)
 
+</br>
 
-ConverterRegistry에 등록해야 한다.
+## 기타
 
-- 부트가 아닌 웹 MVC를 사용하는 경우
-  - webConfig로 컨버터 등록 
-  - WebMvcCongifurer
-    - 스프링 웹 설정을 제공하는 인터페이스
+### `WebApplicationContext`
 
+- 웹 애플리케이션에 대한 설정을 제공한다.
+- 스프링 부트가 생성하는 `ApplicationContext`가 기본적으로 서블릿 기반 `WebApplicationContext`이다.
 
+</br>
 
+### URL prefix
 
+- 파일의 위치를 표현하기 위해 사용된 프로토콜
 
-Formatter
+  > `classpath:`, `http:`, `file:///`, etc
 
-- 웹 특화 바인딩 기능 제공
-- 웹은 보통 문자열로 데이터를 표현하기 때문에
-- thread-safe
-- 빈으로 등록 가능
-- 의존성 주입도 가능
-- MessageSource 이용도 가능
+</br>
 
+### 클래스 패스 ✏️
 
+### 웹 애플리케이션 루트 ✏️
 
-빈으로 등록하지 않고 쓰는 방법
+</br>
 
-- WebConfig addFormatter로 그냥 등록
+## 참고
 
-
-
-
-
-PropertyEditor를 사용하는 것은 DataBinder가 처리
-
-Converter, Formatter는 ConversionService가 실제 변환을 처리
-
-
-
-스프링 부트는 WebConversionService를 제공한다.
-
-- DefaultFormattingConversionService를 상속해서 구현되어있다.
-- 직접 convert, canConvert으로 변환을 구현할 수 있다. (거의 안씀)
-
-
-
-Formatter, Converter를 사용하려고 빈으로 등록할 필요가 없다. 자동으로 등록해준다.
-
-@Component
-
-
-
-부트의 테스트
-
-슬라이싱?
-
-계층형 테스트
-
-- 기본적으로 웹과 관련된 빈들만 등록한다. (컨트롤러)
-
-
-
-테스트에 웹 빈이 아닌 Converter, Formatter를 빈으로 등록하라고 명시해주자
-
-- 컴포넌트 스캔이 가능한 경우에만 지원해준다.
-
-
-
-등록된 컨버터 보는 방법
-
-conversionService 출력하면 다 나옴
-
-
-
-
-
----
-
-SpEL
-
-- 스프링 Expression Language
-- 객체 그래프?
-- jsp에서 자주 사용하는 표현식과 비슷
-- 왜 개발?
-  - 메소드를 호출하는 기능, 문자열 템플릿 기능을 제공해야해서?
-- 어디서 써??
-- #{ ... }
-  - 표현식을 참고
-  - 괄호안을 표현식으로 인식한다.
-  - 표현식을 실행한다.
-  - 표현식 안에서 프로퍼티 참고 가능
-- ${}
-  - 프로퍼티를 참고 
-  - 프로퍼티 안에서는 표현식 사용 못함
-
-
-
-- 산술 연산
-- sprint.io.spEl 참고해보자
-
-
-
-- 빈 참고하기
-  - 그냥 빈 객체를 참조해서 값을 가져오는 것과 sqel로 하는 차이점
-  - 데이터 변경 방지? 특정 value만 가져올 수 있음?
-
-
-
-
-
-- 어디서 쓴다고?
-- @ConditionalOnExpression
-  - sqel지원
-  - 선택적으로 빈을 등록할 수 있다. 빈 설정 파일을 읽어들일 때 선별적으로 빈 등록
-  - 마찬가지로 표현식으로 지정 가능
-- 스프링 시큐리티
-  - xml 설정 파일에서
-  - 어노테이션에서 사용하기도 함
-  - EvaluationContext
-    - 빈을 등록하면 해당 빈이 제공하는 메소드를 표현식으로 호출할 수 있다.
-- Spring Data의 @Query 어노테이션
-- @Quryㅇ에서 :#_{} 이런거!
-- Thymeleaf
-
-
-
-ExpressionParser
-
-- 표현식 문자열을 코딩으로 value로 파싱하는 기능 제공
-
-- expression.getValue(Integer.class)
-  - 여기서도 ConversionService 인터페이스를 사용하는 것
+[생활코딩 - 클래스 패스](https://opentutorials.org/course/1223/5527)

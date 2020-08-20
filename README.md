@@ -44,4 +44,21 @@
 
   [ResourceLoader](https://github.com/beginin15/lecture/blob/master/%232%20스프링%20프레임워크%20핵심%20기술/IoC%20Container/10_ResourceLoader.md)
 
+### Resource / Validation
+
+[Resource 추상화]() 
+
+[Validation 추상화]()
+
+### 데이터 바인딩
+
+[PropertyEditor]()
+
+[Converter와 Formatter]()
+
+### SqEL
+
+[SpEL]()
+
 </details>
+
