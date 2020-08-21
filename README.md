@@ -46,19 +46,19 @@
 
 ### Resource / Validation
 
-[Resource 추상화](https://github.com/beginin15/lecture/blob/master/%232 스프링 프레임워크 핵심 기술/Resource%2C Validation/Resource_추상화.md) 
+[Resource 추상화](https://github.com/beginin15/lecture/blob/master/%232%20%EC%8A%A4%ED%94%84%EB%A7%81%20%ED%94%84%EB%A0%88%EC%9E%84%EC%9B%8C%ED%81%AC%20%ED%95%B5%EC%8B%AC%20%EA%B8%B0%EC%88%A0/Resource%2C%20Validation/Resource_%EC%B6%94%EC%83%81%ED%99%94.md) 
 
-[Validation 추상화](https://github.com/beginin15/lecture/blob/master/%232 스프링 프레임워크 핵심 기술/Resource%2C Validation/Validation_추상화.md)
+[Validation 추상화](https://github.com/beginin15/lecture/blob/master/%232%20%EC%8A%A4%ED%94%84%EB%A7%81%20%ED%94%84%EB%A0%88%EC%9E%84%EC%9B%8C%ED%81%AC%20%ED%95%B5%EC%8B%AC%20%EA%B8%B0%EC%88%A0/Resource%2C%20Validation/Validation_%EC%B6%94%EC%83%81%ED%99%94.md)
 
 ### 데이터 바인딩
 
-[PropertyEditor](https://github.com/beginin15/lecture/blob/master/%232 스프링 프레임워크 핵심 기술/Data Binding/01_PropertyEditor.md)
+[PropertyEditor](https://github.com/beginin15/lecture/blob/master/%232%20%EC%8A%A4%ED%94%84%EB%A7%81%20%ED%94%84%EB%A0%88%EC%9E%84%EC%9B%8C%ED%81%AC%20%ED%95%B5%EC%8B%AC%20%EA%B8%B0%EC%88%A0/Data%20Binding/01_PropertyEditor.md)
 
-[Converter와 Formatter](https://github.com/beginin15/lecture/blob/master/%232 스프링 프레임워크 핵심 기술/Data Binding/02_Converter와 Formatter.md)
+[Converter와 Formatter](https://github.com/beginin15/lecture/blob/master/%232%20%EC%8A%A4%ED%94%84%EB%A7%81%20%ED%94%84%EB%A0%88%EC%9E%84%EC%9B%8C%ED%81%AC%20%ED%95%B5%EC%8B%AC%20%EA%B8%B0%EC%88%A0/Data%20Binding/02_Converter%EC%99%80%20Formatter.md)
 
 ### SpEL
 
-[SpEL](https://github.com/beginin15/lecture/blob/master/%232 스프링 프레임워크 핵심 기술/SpEL/SpEL.md)
+[SpEL](https://github.com/beginin15/lecture/blob/master/%232%20%EC%8A%A4%ED%94%84%EB%A7%81%20%ED%94%84%EB%A0%88%EC%9E%84%EC%9B%8C%ED%81%AC%20%ED%95%B5%EC%8B%AC%20%EA%B8%B0%EC%88%A0/SpEL/SpEL.md)
 
 </details>
 
