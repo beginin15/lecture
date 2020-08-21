@@ -46,17 +46,17 @@
 
 ### Resource / Validation
 
-[Resource 추상화]() 
+[Resource 추상화](https://github.com/beginin15/lecture/blob/master/%232 스프링 프레임워크 핵심 기술/Resource%2C Validation/Resource_추상화.md) 
 
-[Validation 추상화]()
+[Validation 추상화](https://github.com/beginin15/lecture/blob/master/%232 스프링 프레임워크 핵심 기술/Resource%2C Validation/Validation_추상화.md)
 
 ### 데이터 바인딩
 
-[PropertyEditor]()
+[PropertyEditor](https://github.com/beginin15/lecture/blob/master/%232 스프링 프레임워크 핵심 기술/Data Binding/01_PropertyEditor.md)
 
-[Converter와 Formatter]()
+[Converter와 Formatter](https://github.com/beginin15/lecture/blob/master/%232 스프링 프레임워크 핵심 기술/Data Binding/02_Converter와 Formatter.md)
 
-### SqEL
+### SpEL
 
 [SpEL]()
 
