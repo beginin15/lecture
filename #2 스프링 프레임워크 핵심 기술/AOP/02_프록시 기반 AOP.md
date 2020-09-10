@@ -36,6 +36,8 @@
 
 > Crosscutting concern 처리하는 과정을 떠올리자.
 
+> [기존 코드 - 프록시 패턴 적용 이전](https://github.com/beginin15/spring-framework-core/commit/3a58bbe2924e669f3dfdbfda018a77e0966a5557)
+
 </br>
 
 ### 1차
@@ -43,10 +45,14 @@
 #### 프록시 패턴 사용하기
 
 - 클라이언트의 코드 변경 없이 성능 측정을 위한 부가 기능을 수행할 수 있도록 프록시 패턴을 사용했다.
+
 - 문제점
+
   - 중복 코드는 여전히 발생한다.
   - Target 마다 프록시 클래스를 정의해야 한다.
   - 해당 기능을 다른 클래스에서 사용하고 싶다면 더욱 많은 중복 코드가 발생한다.
+
+  > [구현 코드 - 프록시 패턴 적용](https://github.com/beginin15/spring-framework-core/commit/72bf3a8fd38366077fab500daadee2e3127b4fad)
 
 ### 2차
 
@@ -57,8 +63,6 @@
   - 스프링 IoC 컨테이너가 제공하는 기능과 Dynamic 프록시를 함께 사용하면 가능하다. => 이것이 바로 스프링 AOP가 제공하는 기능!
 
     </br>
-
-> [구현 코드]()
 
 </br>
 
